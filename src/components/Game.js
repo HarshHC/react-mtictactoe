@@ -94,6 +94,17 @@ function checkForWins(boardCells){
     if(checkWinsDiagonally(1, 0, 5, PLAYER_O, boardCells) != null) return  checkWinsDiagonally(1, 0, 5, PLAYER_O, boardCells);
     if(checkWinsDiagonally(2, 0, 4, PLAYER_O, boardCells) != null) return  checkWinsDiagonally(2, 0, 4, PLAYER_O, boardCells);
     
+    // checking inverse diagonally for X
+    if(checkWinsDiagonallyInverse(0, 5, 5, PLAYER_X, boardCells) != null) return checkWinsDiagonallyInverse(0, 5, 5, PLAYER_X, boardCells);
+    if(checkWinsDiagonallyInverse(0, 4, 4, PLAYER_X, boardCells) != null) return checkWinsDiagonallyInverse(0, 4, 4, PLAYER_X, boardCells);
+    if(checkWinsDiagonallyInverse(1, 5, 5, PLAYER_X, boardCells) != null) return checkWinsDiagonallyInverse(1, 5, 5, PLAYER_X, boardCells);
+    if(checkWinsDiagonallyInverse(2, 5, 4, PLAYER_X, boardCells) != null) return checkWinsDiagonallyInverse(2, 5, 4, PLAYER_X, boardCells);
+    
+    // checking inverse diagonally for O
+    if(checkWinsDiagonallyInverse(0, 5, 5, PLAYER_O, boardCells) != null) return checkWinsDiagonallyInverse(0, 5, 5, PLAYER_O, boardCells);
+    if(checkWinsDiagonallyInverse(0, 4, 4, PLAYER_O, boardCells) != null) return checkWinsDiagonallyInverse(0, 4, 4, PLAYER_O, boardCells);
+    if(checkWinsDiagonallyInverse(1, 5, 5, PLAYER_O, boardCells) != null) return checkWinsDiagonallyInverse(1, 5, 5, PLAYER_O, boardCells);
+    if(checkWinsDiagonallyInverse(2, 5, 4, PLAYER_O, boardCells) != null) return checkWinsDiagonallyInverse(2, 5, 4, PLAYER_O, boardCells);
 
   return null;
 }
@@ -157,6 +168,11 @@ function checkWinInColumn(checkPlayer, boardCells){
                   }
                   
               }
+              if(totalChecks == 5){
+                winner = checkForItem;
+                return winPositions
+              }
+              winPositions = []
               //print("column done")
           }
       }
@@ -169,7 +185,44 @@ function checkWinInColumn(checkPlayer, boardCells){
     return null;
 }
 
-function checkWinsDiagonally(startingAtRow, startingAtCol, max, checkFor, boardCells){
+function checkWinsDiagonally(startingAtRow, startingAtCol, max, checkFor, boardCells){     
+  let boardCells2d = convertBoardTo2D(boardCells)
+  
+  let winPositions = []
+  
+  var row = startingAtRow
+  var col = startingAtCol
+  
+  let checkForItem = checkFor
+
+  var totalChecks = 0
+
+  for (var i =0; i<= max; i++) {
+    if(boardCells2d[row][col] == checkForItem){
+        if(totalChecks < 5){
+            totalChecks+=1
+            winPositions.push((6*row)+col)
+        }else{
+          winner = checkForItem;
+          return winPositions
+        }
+    }else{
+        totalChecks = 0
+        winPositions = []
+    }
+    
+    if(totalChecks == 5){
+      winner = checkForItem;
+      return winPositions
+    }
+    
+    row+=1
+    col+=1
+  }
+  return null
+}
+
+function checkWinsDiagonallyInverse(startingAtRow, startingAtCol, max, checkFor, boardCells){
                   
       let boardCells2d = convertBoardTo2D(boardCells)
       
@@ -182,7 +235,7 @@ function checkWinsDiagonally(startingAtRow, startingAtCol, max, checkFor, boardC
   
       var totalChecks = 0
 
-      for (var i =0; i<= max; i++) {
+      for(var i =0; i<= max; i++){
 
           if(boardCells2d[row][col] == checkForItem){
               if(totalChecks < 5){
@@ -203,6 +256,7 @@ function checkWinsDiagonally(startingAtRow, startingAtCol, max, checkFor, boardC
           }
           
           row+=1
-          col+=1
+          col-=1
       }
+  
 }
