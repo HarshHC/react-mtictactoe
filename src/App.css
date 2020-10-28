@@ -1,5 +1,18 @@
-body {
+@import url('https://fonts.googleapis.com/css2?family=Mouse+Memoirs&display=swap');
+
+* {
   background-color: black;
+  font-family: 'Mouse Memoirs', sans-serif;
+  letter-spacing: 0.05rem;
+}
+
+.header{
+  color: white;
+  background-color: #d84315;
+  font-size: 1.6em;
+  padding: 2px;
+  width: 100vw;
+  text-align: center;
 }
 
 .square {
@@ -94,8 +107,11 @@ body {
 }
 
 .currentPlayer {
-  margin-top: 4vh;
+  margin-top: 2.5vh;
   font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .gameOptions {
@@ -103,7 +119,7 @@ body {
   display: flex;
   justify-content: space-between;
   margin-bottom: 4vh;
-  margin-top: 10px;
+  margin-top: 16px;
 }
 
 .btn {
@@ -122,4 +138,32 @@ body {
   width: 100%;
   margin: 0 10px;
   padding: 10px 10vw;
+}
+
+.modal-content{
+  border-style: solid;
+  border-width: 2px;
+  border-color: #d84315;
+  border-radius: 10px;
+  box-shadow: 1px 1px 10px #d84315;
+  padding: 0;
+  background-color: black;
+  color: white;
+  margin: 5px;
+}
+
+.modal-footer,.modal-header{
+  border: 0;
+}
+
+/* Landscape  Mobile*/
+@media (max-height: 481px) {
+  .header{
+    height: 0vh;
+  }  
+
+  .btn{
+    height: 10vh;
+    font-size: 4vh;
+  }
 }

@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { updateBoard, updateGameState } from '../actions';
+import { updateBoard, updateGameState, updatePlayers } from '../actions';
 import { idToWinner, PLAYER_O, PLAYER_X } from '../Helpers';
 import Board from './Board';
 import PlayerInfo from './PlayerInfo';
 import GameOptions from './GameOptions';
+import Header from './Header';
 
 let winner = -1;
 
@@ -13,6 +14,7 @@ function Game() {
     const dispatch = useDispatch();
     const board = useSelector(state => state.board)
     const isGameEnded = useSelector(state => state.isGameEnded)
+    const players = useSelector(state => state.players)
 
     const useDisablePinchZoomEffect = () => {
       useEffect(() => {
@@ -36,6 +38,7 @@ function Game() {
         if(!isGameEnded){
           if(checkForWins(board) != null){      
             highlightWinPositions(winner, checkForWins(board))
+            dispatch(updatePlayers(players.player1, players.player2, winner))
             dispatch(updateGameState(true))
           }
         }
@@ -52,6 +55,7 @@ function Game() {
 
     return (
         <div className="game">
+            <Header />
             <PlayerInfo />
             <Board />
             <GameOptions />

@@ -1,5 +1,5 @@
 import React from 'react'
-import { increaseTotalPlayed, nextChance, updateBoard } from '../actions';
+import { increaseTotalPlayed, nextChance, previousChance, updateBoard } from '../actions';
 import {useDispatch, useSelector} from 'react-redux'
 import { idToPlayer, DEFAULT_PLAYER, idToImage } from '../Helpers';
 
@@ -18,6 +18,7 @@ function Square(props) {
             dispatch(updateBoard(currentPlayer, props.id))
             dispatch(increaseTotalPlayed())
             dispatch(nextChance(totalPlayed))
+            dispatch(previousChance(props.id, currentPlayer, totalPlayed, true))
         }
     }
 

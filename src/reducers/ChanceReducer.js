@@ -1,4 +1,4 @@
-import { NEXT_CHANCE} from '../actiontypes'
+import { NEXT_CHANCE, RESET_CHANCE, SET_PLAYER} from '../actiontypes'
 import { PLAYER_O, PLAYER_X } from '../Helpers';
 
 const chanceReducer = (state = 1, action) => {
@@ -13,7 +13,10 @@ const chanceReducer = (state = 1, action) => {
             }else{
                 return state
             }
-
+        case RESET_CHANCE:
+            return PLAYER_X
+        case SET_PLAYER:
+            return action.payload.playerId
         default:
             return state;
     }
