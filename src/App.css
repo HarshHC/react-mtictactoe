@@ -1,3 +1,6 @@
+body {
+  background-color: black;
+}
 
 .square {
   width: 6.5vh;
@@ -38,15 +41,85 @@
   padding: 10px;
   border-style: solid;
   border-width: 2px;
-  border-color: orange;
+  border-color: #d84315;
   border-radius: 10px;
-  box-shadow: 1px 1px 10px orange;
+  box-shadow: 1px 1px 10px #d84315;
 }
 
 .game {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   height: 100vh;
   background-color: black;
+}
+
+.playerInfo {
+  color: white;
+  width: 90vw;
+  height: max-content;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.players {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.player {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 45%;
+}
+
+.player2 {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 45%;
+}
+
+.player-icon {
+  height: 5vh;
+  width: 5vh;
+  margin: 1vw;
+}
+
+.currentPlayer {
+  margin-top: 4vh;
+  font-size: 1.5rem;
+}
+
+.gameOptions {
+  width: 85vw;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4vh;
+  margin-top: 10px;
+}
+
+.btn {
+  background-color: #d84315;
+  border: none;
+  outline:none;
+  color: white;
+}
+
+.btn:focus {
+  border: none;
+  outline: none;
+}
+
+.btn-mg {
+  width: 100%;
+  margin: 0 10px;
+  padding: 10px 10vw;
 }

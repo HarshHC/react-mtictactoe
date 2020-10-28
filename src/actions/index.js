@@ -25,6 +25,12 @@ export const updateBoard = (currentPlayer, squareId) => {
     }
 }
 
+export const resetBoard = () => {
+    return{
+        type: actions.RESET_BOARD,
+    }
+}
+
 export const updateGameState = (gameState) => {
     return{
         type: actions.UPDATE_GAME_STATE,

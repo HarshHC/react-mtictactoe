@@ -2,7 +2,9 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { updateBoard, updateGameState } from '../actions';
 import { idToWinner, PLAYER_O, PLAYER_X } from '../Helpers';
-import Board from './Board'
+import Board from './Board';
+import PlayerInfo from './PlayerInfo';
+import GameOptions from './GameOptions';
 
 let winner = -1;
 
@@ -12,18 +14,11 @@ function Game() {
     const board = useSelector(state => state.board)
     const isGameEnded = useSelector(state => state.isGameEnded)
 
-    document.body.style.overflow = 'hidden';
-
     const useDisablePinchZoomEffect = () => {
       useEffect(() => {
 
-        // highlightWinPositions(PLAYER_O, [0,1,2,3,4]);
-        if(checkForWins(board) != null){
-          if(!isGameEnded){
-            highlightWinPositions(winner, checkForWins(board))
-            dispatch(updateGameState(true))
-          }
-        }
+        document.body.style.overflow = 'hidden';
+        window.scrollTo(0,1);
 
         const disablePinchZoom = (e) => {
           if (e.touches.length > 1) {
@@ -34,11 +29,21 @@ function Game() {
         return () => {
           document.removeEventListener("touchmove", disablePinchZoom)
         }
-      }, [board])
+      }, [])
     }
 
-    useDisablePinchZoomEffect();
+      useEffect(() => {
+        if(!isGameEnded){
+          if(checkForWins(board) != null){      
+            highlightWinPositions(winner, checkForWins(board))
+            dispatch(updateGameState(true))
+          }
+        }
+        return
+      }, [board])
     
+    useDisablePinchZoomEffect();
+
     function highlightWinPositions(winner, winPositions){
       for( var i = 0; i<5;i++) {
           dispatch(updateBoard(idToWinner(winner), winPositions[i]));
@@ -47,7 +52,9 @@ function Game() {
 
     return (
         <div className="game">
+            <PlayerInfo />
             <Board />
+            <GameOptions />
         </div>
     )
 }
