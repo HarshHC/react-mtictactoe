@@ -1,6 +1,7 @@
 import * as actions from '../actiontypes'
 
 export const nextChance = (totalPlayed) => {
+    console.log("COMING FROM ACTION", "NEXT CHANCE CALLE");
     return{
         type: actions.NEXT_CHANCE,
         payload: {
@@ -70,14 +71,15 @@ export const setBoard = (newBoard) => {
     }
 }
 
-export const previousChance = (prev_id, prev_player, prev_tot, newData) => {
+export const previousChance = (prev_id, prev_player, prev_tot, newData, wasReset) => {
     return{
         type: actions.PREVIOUS_CHANCE,
         payload: {
             prev_id,
             prev_player,
             prev_tot,
-            newData
+            newData,
+            wasReset
         }
     }
 }
@@ -99,5 +101,29 @@ export const updatePlayers = (player1, player2, winner) => {
             player2,
             winner
         }
+    }
+}
+
+export const updateOnlineMode = (active, code, thisPlayerIs, connected, joined, chancesPlayed, player1, player2, board) => {
+    return{
+        type: actions.UPDATE_ONLINE_MODE,
+        payload: {
+            active,
+            code,
+            thisPlayerIs,
+            connected,
+            joined,
+            chancesPlayed,
+            player1,
+            player2,
+            board,
+        }
+    }
+}
+
+
+export const resetOnlineMode = () => {
+    return{
+        type: actions.RESET_ONLINE_MODE,
     }
 }

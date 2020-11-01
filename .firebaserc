@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "mtictactoe-fe07f"
+  },
+  "targets": {
+    "mtictactoe-fe07f": {
+      "hosting": {
+        "mtictactoe-fe07f": [
+          "mtictactoe-game"
+        ]
+      }
+    }
+  }
+}

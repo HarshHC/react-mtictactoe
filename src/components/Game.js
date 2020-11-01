@@ -1,24 +1,34 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { updateBoard, updateGameState, updatePlayers } from '../actions';
+import { increaseTotalPlayed, nextChance, setBoard, setCurrentPlayer, setTotalPlayed, updateBoard, updateGameState, updateOnlineMode, updatePlayers } from '../actions';
 import { idToWinner, PLAYER_O, PLAYER_X } from '../Helpers';
 import Board from './Board';
 import PlayerInfo from './PlayerInfo';
 import GameOptions from './GameOptions';
 import Header from './Header';
+import db from '../firebase'
+import AlertDialog from './AlertDialog';
+import { useHistory } from 'react-router-dom';
 
 let winner = -1;
+var max = 3;
 
 function Game() {
 
+    var unsubscribe;
+
     const dispatch = useDispatch();
+    const history = useHistory();
+    const [counter, setCounter] = useState(0)
+    const [noRoomAlert, setNoRoomAlert] = useState(false)
     const board = useSelector(state => state.board)
     const isGameEnded = useSelector(state => state.isGameEnded)
     const players = useSelector(state => state.players)
+    const onlineMode = useSelector(state => state.onlineMode)
+    const currentPlayer = useSelector(state => state.currentPlayer)
 
     const useDisablePinchZoomEffect = () => {
       useEffect(() => {
-
         document.body.style.overflow = 'hidden';
         window.scrollTo(0,1);
 
@@ -35,23 +45,150 @@ function Game() {
     }
 
       useEffect(() => {
-        if(!isGameEnded){
+
+        if(onlineMode.active){
+
+          dispatch(updatePlayers(onlineMode.player1, onlineMode.player2, players.winner))
+
+          console.log("executing");
+          dispatch(updateOnlineMode(true, onlineMode.code, onlineMode.thisPlayerIs, onlineMode.connected, onlineMode.joined, onlineMode.chancesPlayed, onlineMode.player1, onlineMode.player2, onlineMode.board))
+          if(unsubscribe != null){
+            unsubscribe()
+          }
+          unsubscribe = 
+            db.collection("games").doc(onlineMode.code)
+            .onSnapshot(function(doc) {
+                let data = doc.data()
+        
+                if(doc.exists){
+                  if(doc.chancesPlayed > -1){
+                    console.log("Current data: ", doc.data());
+                    dispatch(updateOnlineMode(true, onlineMode.code, onlineMode.thisPlayerIs, data.connected, data.joined, data.chancesPlayed, onlineMode.player1, onlineMode.player2, data.board))
+                  }
+                }else{
+                    setNoRoomAlert(true)
+                }
+            });
+    
+        }
+        return () => {
+          // console.log("UNSUBBING");
+          // if(unsubscribe != null){
+            
+          //   db.collection("games").doc(onlineMode.code).delete().then(function() {
+          //       console.log("Document successfully deleted!");
+          //   }).catch(function(error) {
+          //       console.error("Error removing document: ", error);
+          //   });
+          
+          //   unsubscribe()
+          // }
+        }
+      }, [isGameEnded])
+
+      useEffect(() => {
+        if(onlineMode.active){
+
+          if(!isGameEnded){
+            if(checkForWins(onlineMode.board) != null){
+              highlightWinPositions(winner, checkForWins(onlineMode.board))
+              dispatch(updatePlayers(players.player1, players.player2, winner))
+              dispatch(updateGameState(true))
+            }
+          }
+
+          if(onlineMode.thisPlayerIs != currentPlayer){
+      
+            console.log("GOT AN UPDATE");
+            setCounter(counter + 1)
+            console.log("counter: "+ counter);
+
+            if(onlineMode.thisPlayerIs == PLAYER_O){
+              console.log("WE HERE");
+
+              if(onlineMode.chancesPlayed % 2 != 0 && onlineMode.chancesPlayed > 0){
+                if(currentPlayer != PLAYER_O){
+                  dispatch(setCurrentPlayer(PLAYER_O))
+                }
+              }
+              
+            }else{
+              if(onlineMode.chancesPlayed % 2 != 0) {
+                if(currentPlayer != PLAYER_X){
+                  dispatch(setCurrentPlayer(PLAYER_X))
+                }              
+              }
+            }
+
+            
+          }
+
+          dispatch(setBoard(onlineMode.board))
+          dispatch(setTotalPlayed(onlineMode.chancesPlayed))
+            
+
+          if (onlineMode.board.every(item => item === 0 && onlineMode.thisPlayerIs == PLAYER_O)) {
+            // new game
+            console.log("Starting new game");
+            dispatch(updateGameState(false))
+            dispatch(setCurrentPlayer(PLAYER_X))
+            dispatch(updatePlayers(players.player1, players.player2, -1))
+            dispatch(setTotalPlayed(-1))
+            max = 3
+            winner = -1
+          }else if(onlineMode.board.every(item => item === 0 && onlineMode.thisPlayerIs == PLAYER_X)) {
+            dispatch(updateGameState(false))  
+            max = 3
+            winner = -1
+          }
+          console.log("TOTAL PLAYED ONLINE:", onlineMode.chancesPlayed);
+  
+        }
+        
+      }, [onlineMode])
+
+      useEffect(() => {
+        
+        if(!isGameEnded && !onlineMode.active){
           if(checkForWins(board) != null){      
             highlightWinPositions(winner, checkForWins(board))
             dispatch(updatePlayers(players.player1, players.player2, winner))
             dispatch(updateGameState(true))
           }
         }
-        return
+
+        dispatch(updatePlayers(players.player1, players.player2, winner))
+
+        if(winner != -1 && onlineMode.active){
+            highlightWinPositions(winner, checkForWins(onlineMode.board))
+            dispatch(updatePlayers(players.player1, players.player2, winner))
+        }
       }, [board])
     
     useDisablePinchZoomEffect();
 
     function highlightWinPositions(winner, winPositions){
-      for( var i = 0; i<5;i++) {
+      console.log("SHOWING WINNER AT POSITIONS: "+ winPositions);
+      if(winPositions != null && winner != null && max > 0){      
+        console.log("OK SHOWING IT NOW "+ winPositions);
+        for( var i = 0; i<5;i++) {
           dispatch(updateBoard(idToWinner(winner), winPositions[i]));
-      }
+        }
+        max = max -1
+      }   
     }
+
+    window.addEventListener("beforeunload", (ev) => 
+    {  
+        ev.preventDefault();
+        db.collection("games").doc(onlineMode.code).delete().then(function() {
+            console.log("Document successfully deleted!");
+        }).catch(function(error) {
+            console.error("Error removing document: ", error);
+        });
+        
+        unsubscribe()
+    });
 
     return (
         <div className="game">
@@ -59,6 +196,16 @@ function Game() {
             <PlayerInfo />
             <Board />
             <GameOptions />
+
+            <AlertDialog
+              show={noRoomAlert}
+              dialogClassName="resetModel"
+              text = "It appears that your opponent left the game and the room no longer exists"
+              onHide={() => {
+                  setNoRoomAlert(false)
+                  history.push("/online")
+              }}
+              />
         </div>
     )
 }
@@ -177,7 +324,6 @@ function checkWinInColumn(checkPlayer, boardCells){
                           winPositions = []
                       }
                   }
-                  
               }
               if(totalChecks == 5){
                 winner = checkForItem;

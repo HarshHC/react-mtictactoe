@@ -1,6 +1,5 @@
 import React from 'react'
 import BoardRow from './BoardRow'
-import Square from './Square'
 
 function Board() {
     return (

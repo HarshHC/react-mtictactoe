@@ -5,6 +5,7 @@ import BoardReducer from './BoardReducer'
 import GameStateReducer from './GameStateReducer'
 import PlayerReducer from './PlayerReducer'
 import BoardHistory from './BoardHistory';
+import OnlineReducer from './OnlineReducer'
 
 const allReducers = combineReducers({
     currentPlayer: chanceReducer,
@@ -12,7 +13,8 @@ const allReducers = combineReducers({
     board: BoardReducer,
     isGameEnded: GameStateReducer,
     players: PlayerReducer,
-    boardHistory: BoardHistory
+    boardHistory: BoardHistory,
+    onlineMode: OnlineReducer
 });
 
 export default allReducers;

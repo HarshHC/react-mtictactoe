@@ -152,6 +152,19 @@
   margin: 5px;
 }
 
+.modal-body p{
+  font-family: sans-serif;
+  font-weight: bold;
+  letter-spacing: 0.01rem;
+}
+
+.modal-body a{
+  font-family: sans-serif;
+  font-weight: bold;
+  letter-spacing: 0.01rem;
+  color: #d84315;
+}
+
 .modal-footer,.modal-header{
   border: 0;
 }
@@ -166,4 +179,94 @@
     height: 10vh;
     font-size: 4vh;
   }
+}
+
+.menu{
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+}
+
+.menu-btn{
+  width: 60vw;
+  font-size: 1rem;
+  padding: 10px;
+  color: #d84315;
+  border-radius: 10px;
+  border: solid 2px #d84315;
+  box-shadow: 1px 1px 10px #d84315;
+  margin-top: 2.5vh;
+  font-family: sans-serif;
+  outline: none;
+}
+
+.menu-title{
+  font-size: 4rem;
+  margin-bottom: 4vh;
+  color: #d84315;
+}
+
+.online{
+  font-family: sans-serif;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+}
+
+.online-text{
+  margin-top: 2.5vh;
+  font-size: 1.3rem;
+}
+
+.online-input{
+  width: 60vw;
+  border-radius: 10px;
+  border: solid 2px #d84315;
+  margin-top: 2.5vh;
+  text-align: center;
+  color: white;
+  padding: 10px;
+  text-transform: uppercase;
+}
+
+.game-input{
+  width: 60vw;
+  border-radius: 10px;
+  border: solid 2px #d84315;
+  margin-top: 2.5vh;
+  text-align: center;
+  color: white;
+  padding: 10px;
+}
+
+.game-room{
+  font-family: sans-serif;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 85vh;
+}
+
+.room-code{
+  margin-top: 2.5vh;
+  color: #d84315;
+  font-size: 2rem;
+}
+
+.player-status {
+  color: white;
+  text-align: center;
+  font-family: sans-serif;
+}
+
+.text-center {
+  text-align: center;
 }

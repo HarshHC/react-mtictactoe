@@ -6,7 +6,7 @@ const boardReducer = (state = defaultBoard, action) => {
     switch(action.type) {
         case UPDATE_BOARD:
             return state.map((item, index) => {
-                return index == action.payload.index ? action.payload.currentPlayer : item
+                return index === action.payload.index ? action.payload.currentPlayer : item
             });
         case SET_BOARD:
             return action.payload.newBoard

@@ -5,7 +5,7 @@ const chanceReducer = (state = 1, action) => {
     switch(action.type){
         case NEXT_CHANCE:
             if (isTimeToSwitchPlayer(action.payload.totalPlayed)) {
-                if(state == PLAYER_X){
+                if(state === PLAYER_X){
                     return PLAYER_O
                 }else{
                     return PLAYER_X
@@ -23,7 +23,7 @@ const chanceReducer = (state = 1, action) => {
 }
 
 function isTimeToSwitchPlayer(totalPlayed) {
-    if(totalPlayed%2 == 0){
+    if(totalPlayed%2 === 0){
         return true
     }else{
         return false
